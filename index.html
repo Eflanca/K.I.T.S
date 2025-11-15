@@ -60,7 +60,7 @@
         /* 添加图片容器，用于处理黑色背景问题 */
         .logo-container {
             z-index: 98;
-            background-color: #0a0a0a; /* 与页面背景相同的颜色 */
+            background-color: #0a0a0a;
             padding: 5px;
             border-radius: 3px;
         }
@@ -78,13 +78,26 @@
             right: 15px;
         }
         
-        /* 移动端 - 相对定位，在页面顶部 */
+        /* 移动端 - 绝对定位，在页面左上角和右上角 */
         .mobile-logos {
             display: none;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 900px;
-            margin-bottom: 20px;
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            z-index: 99;
+        }
+        
+        .mobile-logos .scp-logo-container {
+            position: absolute;
+            top: 0;
+            left: 10px;
+        }
+        
+        .mobile-logos .mtf-logo-container {
+            position: absolute;
+            top: 0;
+            right: 10px;
         }
         
         .main-container {
@@ -328,7 +341,7 @@
             }
             
             .mobile-logos {
-                display: flex;
+                display: block;
             }
             
             .desktop-logos {
@@ -337,7 +350,7 @@
             
             .main-container {
                 flex-direction: column;
-                margin-top: 0; /* 移动端不需要顶部边距 */
+                margin-top: 70px; /* 为移动端标志图片留出空间 */
             }
             
             .warning-area {
@@ -403,13 +416,13 @@
         </div>
     </div>
     
-    <!-- 移动端标志 - 相对定位，在页面顶部 -->
+    <!-- 移动端标志 - 绝对定位，在页面左上角和右上角 -->
     <div class="mobile-logos">
-        <div class="logo-container">
+        <div class="logo-container scp-logo-container">
             <img src="SCP.jpg" alt="SCP Foundation" class="logo scp-logo">
         </div>
         
-        <div class="logo-container">
+        <div class="logo-container mtf-logo-container">
             <img src="MTF.jpg" alt="Mobile Task Force" class="logo mtf-logo">
         </div>
     </div>
