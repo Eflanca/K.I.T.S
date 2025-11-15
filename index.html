@@ -1374,9 +1374,17 @@
             return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
         }
 
-        // 联邦特别行动组提取函数
+        // 修复造神计划提取函数
+        function extractGodMakingPlanIntro(text) {
+            const start = text.indexOf('"造神计划"：');
+            if (start === -1) return '内容未找到';
+            const end = text.indexOf('联邦执法局特别行动组"首席"小组：');
+            return end !== -1 ? text.substring(start, end) : text.substring(start);
+        }
+
+        // 修复特别行动组提取函数
         function extractChiefTeamIntro(text) {
-            const start = text.indexOf('代号"首席"(状态未知)：');
+            const start = text.indexOf('联邦特别行动组：');
             const end = text.indexOf('代号"主角"(长期外派)：');
             return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
         }
@@ -1425,7 +1433,7 @@
 
         function extractDreamBuilderTeam(text) {
             const start = text.indexOf('代号"筑梦"(封存)：');
-            const end = text.indexOf('造神计划：');
+            const end = text.indexOf('"造神计划"：');
             return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
         }
 
@@ -1460,13 +1468,6 @@
             return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
         }
 
-        // 造神计划提取函数
-        function extractGodMakingPlanIntro(text) {
-            const start = text.indexOf('造神计划：');
-            const end = text.indexOf('联邦执法局特别行动组"首席"小组：');
-            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
-        }
-
         function extractTwelveApostles(text) {
             const start = text.indexOf('十二使徒：');
             const end = text.indexOf('夏黎虫族(Xenorapax Swarm)：');
@@ -1497,125 +1498,187 @@
             return start !== -1 ? text.substring(start) : '内容未找到';
         }
 
-        // 原初七神提取函数
+        // 重新设计原初七神提取函数
+        function extractPrimordialGodsFull(text) {
+            const gods = {
+                introduction: { title: '原初七神 - 简介', content: '' },
+                fate: { title: '命运之神 - 缪', content: {} },
+                law: { title: '法则之神 - 珐', content: {} },
+                sky: { title: '天空之神 - 昙', content: {} },
+                earth: { title: '大地之神 - 埊', content: {} },
+                ocean: { title: '海洋之神 - 瀚', content: {} },
+                life: { title: '生命之神 - 棽', content: {} },
+                death: { title: '死亡之神 - 殇', content: {} },
+                common: { title: '公共区域', content: '' }
+            };
+
+            // 提取简介
+            const introEnd = text.indexOf('命运之神是一位作家');
+            if (introEnd !== -1) {
+                gods.introduction.content = text.substring(0, introEnd);
+            }
+
+            // 提取每个神的完整信息
+            const godSections = text.split(/命运之神|法则之神|天空之神|大地之神|海洋之神|生命之神|死亡之神|公共区域：/);
+            
+            // 由于分割会创建多个部分，需要重新组织
+            let currentSection = '';
+            for (let i = 1; i < godSections.length; i++) {
+                const section = godSections[i].trim();
+                
+                if (section.includes('命运之神') || currentSection.includes('命运之神')) {
+                    gods.fate.content = extractGodDetails(section, '命运之神', '缪');
+                } else if (section.includes('法则之神') || currentSection.includes('法则之神')) {
+                    gods.law.content = extractGodDetails(section, '法则之神', '珐');
+                } else if (section.includes('天空之神') || currentSection.includes('天空之神')) {
+                    gods.sky.content = extractGodDetails(section, '天空之神', '昙');
+                } else if (section.includes('大地之神') || currentSection.includes('大地之神')) {
+                    gods.earth.content = extractGodDetails(section, '大地之神', '埊');
+                } else if (section.includes('海洋之神') || currentSection.includes('海洋之神')) {
+                    gods.ocean.content = extractGodDetails(section, '海洋之神', '瀚');
+                } else if (section.includes('生命之神') || currentSection.includes('生命之神')) {
+                    gods.life.content = extractGodDetails(section, '生命之神', '棽');
+                } else if (section.includes('死亡之神') || currentSection.includes('死亡之神')) {
+                    gods.death.content = extractGodDetails(section, '死亡之神', '殇');
+                } else if (section.includes('公共区域')) {
+                    gods.common.content = section;
+                }
+                
+                currentSection = section;
+            }
+
+            return gods;
+        }
+
+        // 提取单个神祇的详细信息
+        function extractGodDetails(section, godName, chineseName) {
+            const details = {
+                name: '',
+                job: '',
+                image: '',
+                studio: '',
+                bedroom: ''
+            };
+
+            // 提取名称信息
+            const nameMatch = section.match(/[""]?(.+?)[""]?叫[""]?(.+?)[""]?(?:，|。|$)/);
+            if (nameMatch) {
+                details.name = `${godName}叫"${nameMatch[2]}"`;
+            }
+
+            // 提取职位信息
+            const jobMatch = section.match(new RegExp(`${godName}是(.+?)(?:，|。|$)`));
+            if (jobMatch) {
+                details.job = `${godName}是${jobMatch[1]}`;
+            }
+
+            // 提取形象信息
+            const imageStart = section.indexOf(chineseName + '：');
+            if (imageStart !== -1) {
+                const imageEnd = section.indexOf('工作室：', imageStart);
+                if (imageEnd !== -1) {
+                    details.image = section.substring(imageStart, imageEnd).trim();
+                } else {
+                    details.image = section.substring(imageStart).trim();
+                }
+            }
+
+            // 提取工作室信息
+            const studioStart = section.indexOf('工作室：');
+            if (studioStart !== -1) {
+                const studioEnd = section.indexOf('卧室：', studioStart);
+                if (studioEnd !== -1) {
+                    details.studio = section.substring(studioStart, studioEnd).trim();
+                } else {
+                    details.studio = section.substring(studioStart).trim();
+                }
+            }
+
+            // 提取卧室信息
+            const bedroomStart = section.indexOf('卧室：');
+            if (bedroomStart !== -1) {
+                const bedroomEnd = section.indexOf('公共区域：', bedroomStart);
+                if (bedroomEnd !== -1) {
+                    details.bedroom = section.substring(bedroomStart, bedroomEnd).trim();
+                } else {
+                    details.bedroom = section.substring(bedroomStart).trim();
+                }
+            }
+
+            return details;
+        }
+
+        // 更新原初七神的各个提取函数
         function extractPrimordialIntroduction(text) {
-            const end = text.indexOf('命运之神是一位作家');
-            return end !== -1 ? text.substring(0, end) : '内容未找到';
+            const gods = extractPrimordialGodsFull(text);
+            return gods.introduction.content || '内容未找到';
         }
 
         function extractFateGod(text) {
-            return extractGodDetails(text, '命运之神', '缪', '法则之神');
+            const gods = extractPrimordialGodsFull(text);
+            return gods.fate.content || '内容未找到';
         }
 
         function extractLawGod(text) {
-            return extractGodDetails(text, '法则之神', '珐', '天空之神');
+            const gods = extractPrimordialGodsFull(text);
+            return gods.law.content || '内容未找到';
         }
 
         function extractSkyGod(text) {
-            return extractGodDetails(text, '天空之神', '昙', '大地之神');
+            const gods = extractPrimordialGodsFull(text);
+            return gods.sky.content || '内容未找到';
         }
 
         function extractEarthGod(text) {
-            return extractGodDetails(text, '大地之神', '埊', '海洋之神');
+            const gods = extractPrimordialGodsFull(text);
+            return gods.earth.content || '内容未找到';
         }
 
         function extractOceanGod(text) {
-            return extractGodDetails(text, '海洋之神', '瀚', '生命之神');
+            const gods = extractPrimordialGodsFull(text);
+            return gods.ocean.content || '内容未找到';
         }
 
         function extractLifeGod(text) {
-            return extractGodDetails(text, '生命之神', '棽', '死亡之神');
+            const gods = extractPrimordialGodsFull(text);
+            return gods.life.content || '内容未找到';
         }
 
         function extractDeathGod(text) {
-            return extractGodDetails(text, '死亡之神', '殇', '公共区域：');
+            const gods = extractPrimordialGodsFull(text);
+            return gods.death.content || '内容未找到';
         }
 
         function extractCommonArea(text) {
-            const start = text.indexOf('公共区域：');
-            return start !== -1 ? text.substring(start) : '内容未找到';
+            const gods = extractPrimordialGodsFull(text);
+            return gods.common.content || '内容未找到';
         }
 
-        // 通用神祇详情提取函数
-        function extractGodDetails(text, godName, chineseName, nextGodName) {
-            const start = text.indexOf(godName);
-            const end = nextGodName ? text.indexOf(nextGodName) : text.indexOf('公共区域：');
-            
-            if (start === -1) return '内容未找到';
-            
-            let content = end !== -1 ? text.substring(start, end) : text.substring(start);
-            
-            // 提取名称
-            const nameStart = content.indexOf('“' + godName.substring(0, 2) + '”叫');
-            let nameContent = '';
-            if (nameStart !== -1) {
-                const nameEnd = content.indexOf('。', nameStart);
-                if (nameEnd !== -1) {
-                    nameContent = content.substring(nameStart, nameEnd + 1);
-                }
-            }
-            
-            // 提取职位
-            const jobStart = content.indexOf(godName + '是一位');
-            let jobContent = '';
-            if (jobStart !== -1) {
-                const jobEnd = content.indexOf('。', jobStart);
-                if (jobEnd !== -1) {
-                    jobContent = content.substring(jobStart, jobEnd + 1);
-                }
-            }
-            
-            // 提取形象
-            const imageStart = content.indexOf(chineseName + '：');
-            let imageContent = '';
-            if (imageStart !== -1) {
-                const imageEnd = content.indexOf('工作室：', imageStart);
-                if (imageEnd !== -1) {
-                    imageContent = content.substring(imageStart, imageEnd);
-                }
-            }
-            
-            // 提取工作室
-            const studioStart = content.indexOf('工作室：');
-            let studioContent = '';
-            if (studioStart !== -1) {
-                const studioEnd = content.indexOf('卧室：', studioStart);
-                if (studioEnd !== -1) {
-                    studioContent = content.substring(studioStart, studioEnd);
-                }
-            }
-            
-            // 提取卧室
-            const bedroomStart = content.indexOf('卧室：');
-            let bedroomContent = '';
-            if (bedroomStart !== -1) {
-                const bedroomEnd = content.indexOf(chineseName + '的', bedroomStart + 10);
-                if (bedroomEnd !== -1) {
-                    bedroomContent = content.substring(bedroomStart, bedroomEnd);
-                } else {
-                    bedroomContent = content.substring(bedroomStart);
-                }
-            }
-            
-            return {
-                name: nameContent,
-                job: jobContent,
-                image: imageContent,
-                studio: studioContent,
-                bedroom: bedroomContent
-            };
-        }
-
-        // 人物特辑提取函数
+        // 修复人物特辑提取函数 - 李明航
         function extractLiMinghang(text) {
             const start = text.indexOf('"星渊来客"：夏黎王子李明航');
-            const end = text.indexOf('"飘零残枝"：生命遗孤帕莱蔓');
-            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+            const end = text.indexOf('人物关系：');
+            if (start !== -1) {
+                // 找到人物关系部分，然后继续找到下一个可能的人物或文件结尾
+                let content = text.substring(start);
+                const relationEnd = content.indexOf('人物关系：');
+                if (relationEnd !== -1) {
+                    // 找到人物关系的结束（假设在下一个标题或文件结尾）
+                    const nextPerson = content.indexOf('"飘零残枝"：');
+                    if (nextPerson !== -1) {
+                        return content.substring(0, nextPerson);
+                    }
+                    return content.substring(0, relationEnd + 100); // 包含部分人物关系
+                }
+                return content;
+            }
+            return '内容未找到';
         }
 
         function extractPalamon(text) {
             const start = text.indexOf('"飘零残枝"：生命遗孤帕莱蔓');
-            return start !== -1 ? text.substring(start) : '内容未找到';
+            if (start === -1) return '该人物信息在当前文档版本中尚未添加';
+            return text.substring(start);
         }
 
         // 加载文档函数
@@ -1738,39 +1801,24 @@
             
             let html = `<h3>${title}</h3>`;
             
-            if (godData.name) {
-                html += `<div class="god-details">
-                    <h4>名称</h4>
-                    <p>${godData.name}</p>
-                </div>`;
-            }
-            
-            if (godData.job) {
-                html += `<div class="god-details">
-                    <h4>职位</h4>
-                    <p>${godData.job}</p>
-                </div>`;
-            }
-            
-            if (godData.image) {
-                html += `<div class="god-details">
-                    <h4>形象</h4>
-                    <p>${godData.image}</p>
-                </div>`;
-            }
-            
-            if (godData.studio) {
-                html += `<div class="god-details">
-                    <h4>工作室</h4>
-                    <p>${godData.studio}</p>
-                </div>`;
-            }
-            
-            if (godData.bedroom) {
-                html += `<div class="god-details">
-                    <h4>卧室</h4>
-                    <p>${godData.bedroom}</p>
-                </div>`;
+            // 如果godData是对象，按字段格式化
+            if (typeof godData === 'object') {
+                const fields = [
+                    { key: 'name', label: '名称' },
+                    { key: 'job', label: '职位' },
+                    { key: 'image', label: '形象' },
+                    { key: 'studio', label: '工作室' },
+                    { key: 'bedroom', label: '卧室' }
+                ];
+                
+                fields.forEach(field => {
+                    if (godData[field.key]) {
+                        html += `<div class="god-details">
+                            <h4>${field.label}</h4>
+                            <p>${godData[field.key]}</p>
+                        </div>`;
+                    }
+                });
             }
             
             return html;
