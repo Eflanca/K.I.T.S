@@ -51,13 +51,11 @@
             100% { top: 100%; }
         }
         
-        /* 标志图片样式 */
         .logo {
             z-index: 99;
             max-height: 70px;
         }
         
-        /* 添加图片容器，用于处理黑色背景问题 */
         .logo-container {
             z-index: 98;
             background-color: #0a0a0a;
@@ -65,7 +63,6 @@
             border-radius: 3px;
         }
         
-        /* 桌面端 - 固定定位 */
         .desktop-logos .scp-logo-container {
             position: fixed;
             top: 15px;
@@ -78,7 +75,6 @@
             right: 15px;
         }
         
-        /* 移动端 - 绝对定位，在页面左上角和右上角 */
         .mobile-logos {
             display: none;
             position: absolute;
@@ -111,7 +107,7 @@
             min-height: 500px;
             position: relative;
             border: 1px solid #333;
-            margin-top: 40px; /* 为桌面端固定定位的标志图片留出空间 */
+            margin-top: 40px;
         }
         .main-container::before {
             content: "";
@@ -123,7 +119,7 @@
             background: linear-gradient(90deg, transparent, #8b0000, transparent);
             z-index: 10;
         }
-        /* 左侧功能区域 */
+        
         .function-area {
             flex: 1;
             padding: 30px;
@@ -288,7 +284,7 @@
             font-size: 0.7em;
             color: #2e8b57;
         }
-        /* 右侧警告区域 */
+        
         .warning-area {
             width: 300px;
             background: #1a0a0a;
@@ -333,7 +329,7 @@
             font-size: 0.8em;
             color: #8b0000;
         }
-        /* 响应式设计 - 移动端 */
+        
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -350,7 +346,7 @@
             
             .main-container {
                 flex-direction: column;
-                margin-top: 70px; /* 为移动端标志图片留出空间 */
+                margin-top: 70px;
             }
             
             .warning-area {
@@ -363,7 +359,7 @@
                 padding: 20px;
             }
             .logo {
-                max-height: 50px; /* 移动端减小标志大小 */
+                max-height: 50px;
             }
             .logo-container {
                 padding: 3px;
@@ -381,7 +377,7 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
-        /* 安全锁定样式 */
+        
         .lockout-message {
             color: #ff0000;
             background: rgba(139, 0, 0, 0.1);
@@ -400,9 +396,59 @@
             font-size: 0.8em;
             margin-top: 5px;
         }
-        /* 锁定状态下隐藏的元素 */
+        
         .lockout-hidden {
             display: none !important;
+        }
+        
+        /* 新增：文档内容样式 */
+        .document-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #333;
+            border-radius: 3px;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        
+        .document-content h3 {
+            color: #8b0000;
+            margin: 20px 0 10px 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+        
+        .document-content h4 {
+            color: #a00000;
+            margin: 15px 0 8px 0;
+        }
+        
+        .document-content p {
+            margin-bottom: 12px;
+        }
+        
+        .document-content .highlight {
+            color: #2e8b57;
+            font-weight: bold;
+        }
+        
+        .document-content ul {
+            margin: 10px 0 10px 20px;
+        }
+        
+        .document-content li {
+            margin-bottom: 5px;
+        }
+        
+        .loading-indicator {
+            color: #2e8b57;
+            text-align: center;
+            padding: 20px;
         }
     </style>
 </head>
@@ -476,6 +522,10 @@
                 <div class="menu-item" onclick="openLink('http://scp-wiki-cn.wikidot.com/')">
                     访问基金会官网
                 </div>
+                <!-- 新增：访问数据库 -->
+                <div class="menu-item" onclick="showScreen('databaseScreen')">
+                    访问数据库
+                </div>
                 <div style="margin-top: auto;">
                     <button class="btn btn-secondary" onclick="logout()">安全退出</button>
                 </div>
@@ -492,6 +542,289 @@
                 <button class="btn" onclick="callOwner()">启动安全通话</button>
                 <div style="margin-top: auto;">
                     <button class="btn btn-secondary" onclick="showScreen('authScreen')">取消并返回</button>
+                </div>
+            </div>
+            
+            <!-- 数据库屏幕 -->
+            <div id="databaseScreen" class="screen">
+                <div class="terminal-text">> 连接到中央数据库...</div>
+                <h3>数据库访问界面</h3>
+                <p>选择要访问的数据库类别：</p>
+                
+                <div class="menu-item" onclick="showScreen('fictionLibraryScreen')">
+                    访问小说库
+                </div>
+                
+                <div class="menu-item" onclick="showScreen('settingLibraryScreen')">
+                    访问设定库
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('menuScreen')">返回主菜单</button>
+                </div>
+            </div>
+            
+            <!-- 小说库屏幕 -->
+            <div id="fictionLibraryScreen" class="screen">
+                <div class="terminal-text">> 访问小说库...</div>
+                <h3>小说库</h3>
+                <p>可用文档：</p>
+                
+                <div class="menu-item" onclick="loadDocument('772105k')">
+                    《772,105k收容事件》
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('databaseScreen')">返回数据库</button>
+                </div>
+            </div>
+            
+            <!-- 设定库屏幕 -->
+            <div id="settingLibraryScreen" class="screen">
+                <div class="terminal-text">> 访问设定库...</div>
+                <h3>设定库</h3>
+                <p>可用文档：</p>
+                
+                <div class="menu-item" onclick="showScreen('universeScreen')">
+                    宇宙详解
+                </div>
+                
+                <div class="menu-item" onclick="showScreen('primordialGodsScreen')">
+                    原初七神
+                </div>
+                
+                <div class="menu-item" onclick="showScreen('charactersScreen')">
+                    人物特辑
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('databaseScreen')">返回数据库</button>
+                </div>
+            </div>
+            
+            <!-- 宇宙详解屏幕 -->
+            <div id="universeScreen" class="screen">
+                <div class="terminal-text">> 加载宇宙详解文档...</div>
+                <h3>宇宙详解</h3>
+                <p>选择要查看的部分：</p>
+                
+                <div class="menu-item" onclick="showScreen('federationScreen')">
+                    埃科特联邦
+                </div>
+                
+                <div class="menu-item" onclick="showScreen('xenorapaxScreen')">
+                    夏黎虫族
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('settingLibraryScreen')">返回设定库</button>
+                </div>
+            </div>
+            
+            <!-- 联邦屏幕 -->
+            <div id="federationScreen" class="screen">
+                <div class="terminal-text">> 加载埃科特联邦数据...</div>
+                <h3>埃科特联邦</h3>
+                <p>选择要查看的部分：</p>
+                
+                <div class="menu-item" onclick="loadDocument('federationHistory')">
+                    简史
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('federationSystem')">
+                    政治制度
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('federationMilitary')">
+                    军队
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('federationAdministration')">
+                    行政划分
+                </div>
+                
+                <div class="menu-item" onclick="showScreen('federationForcesScreen')">
+                    势力
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('federationSequence')">
+                    天赋序列
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('federationSpecial')">
+                    联邦特别行动组
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('godMakingPlan')">
+                    造神计划
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('twelveApostles')">
+                    十二使徒
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('universeScreen')">返回宇宙详解</button>
+                </div>
+            </div>
+            
+            <!-- 联邦势力屏幕 -->
+            <div id="federationForcesScreen" class="screen">
+                <div class="terminal-text">> 加载联邦势力数据...</div>
+                <h3>联邦势力</h3>
+                <p>选择要查看的势力：</p>
+                
+                <div class="menu-item" onclick="loadDocument('blancaGroup')">
+                    布兰卡集团
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('asrFoundation')">
+                    A.E.S.I.R基金会
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('cpcAA')">
+                    卡萨布兰卡泛宇宙裁决协会
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('chaosTemple')">
+                    混沌圣殿协会
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('tianYuanGroup')">
+                    天渊集团
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('truthChurch')">
+                    真理教会
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('sequenceAssociation')">
+                    序列协会
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('fleshClan')">
+                    血肉氏族
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('rootConvention')">
+                    根蔓公约
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('wizardHall')">
+                    术士殿堂
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('mechanicalCollege')">
+                    机械学院
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('federationScreen')">返回联邦</button>
+                </div>
+            </div>
+            
+            <!-- 夏黎虫族屏幕 -->
+            <div id="xenorapaxScreen" class="screen">
+                <div class="terminal-text">> 加载夏黎虫族数据...</div>
+                <h3>夏黎虫族</h3>
+                <p>选择要查看的部分：</p>
+                
+                <div class="menu-item" onclick="loadDocument('xenorapaxIntroduction')">
+                    简介
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('xenorapaxPhysiology')">
+                    生理特征
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('xenorapaxSociety')">
+                    社会结构
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('xenorapaxBehavior')">
+                    行为模式
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('universeScreen')">返回宇宙详解</button>
+                </div>
+            </div>
+            
+            <!-- 原初七神屏幕 -->
+            <div id="primordialGodsScreen" class="screen">
+                <div class="terminal-text">> 加载原初七神数据...</div>
+                <h3>原初七神</h3>
+                <p>选择要查看的部分：</p>
+                
+                <div class="menu-item" onclick="loadDocument('primordialIntroduction')">
+                    简介
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('fateGod')">
+                    命运之神 - 缪
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('lawGod')">
+                    法则之神 - 珐
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('skyGod')">
+                    天空之神 - 昙
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('earthGod')">
+                    大地之神 - 埊
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('oceanGod')">
+                    海洋之神 - 瀚
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('lifeGod')">
+                    生命之神 - 棽
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('deathGod')">
+                    死亡之神 - 殇
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('commonArea')">
+                    公共区域
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('settingLibraryScreen')">返回设定库</button>
+                </div>
+            </div>
+            
+            <!-- 人物特辑屏幕 -->
+            <div id="charactersScreen" class="screen">
+                <div class="terminal-text">> 加载人物特辑数据...</div>
+                <h3>人物特辑</h3>
+                <p>选择要查看的人物：</p>
+                
+                <div class="menu-item" onclick="loadDocument('liMinghang')">
+                    "星渊来客"：夏黎王子李明航
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('palamon')">
+                    "飘零残枝"：生命遗孤帕莱蔓
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('settingLibraryScreen')">返回设定库</button>
+                </div>
+            </div>
+            
+            <!-- 文档显示屏幕 -->
+            <div id="documentScreen" class="screen">
+                <div class="terminal-text">> 加载文档内容...</div>
+                <h3 id="documentTitle">文档标题</h3>
+                <div id="documentContent" class="document-content">
+                    <!-- 文档内容将通过JavaScript动态加载 -->
+                </div>
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" id="backButton">返回</button>
                 </div>
             </div>
             
@@ -513,14 +846,548 @@
 
     <script>
         // 密码配置
-        const MASTER_PASSWORD = "0000"; // 主人密码
-        const MAX_ATTEMPTS = 1; // 最大尝试次数
-        const LOCKOUT_DURATION = 5 * 60 * 1000; // 锁定时间（5分钟，毫秒）
+        const MASTER_PASSWORD = "0000";
+        const MAX_ATTEMPTS = 1;
+        const LOCKOUT_DURATION = 5 * 60 * 1000;
         
-        // 从本地存储加载尝试次数和锁定状态
         let attempts = parseInt(localStorage.getItem('loginAttempts')) || 0;
         let lockoutUntil = parseInt(localStorage.getItem('lockoutUntil')) || 0;
         let countdownInterval = null;
+
+        // 文档映射配置
+        const documentMap = {
+            // 小说库
+            '772105k': { 
+                file: '772,105k收容事件.txt', 
+                title: '《772,105k收容事件》',
+                backTo: 'fictionLibraryScreen'
+            },
+            
+            // 宇宙详解 - 联邦部分
+            'federationHistory': { 
+                file: '宇宙详解.txt',
+                title: '埃科特联邦 - 简史',
+                backTo: 'federationScreen',
+                extractor: extractFederationHistory
+            },
+            'federationSystem': { 
+                file: '宇宙详解.txt',
+                title: '埃科特联邦 - 政治制度',
+                backTo: 'federationScreen',
+                extractor: extractFederationSystem
+            },
+            'federationMilitary': { 
+                file: '宇宙详解.txt',
+                title: '埃科特联邦 - 军队',
+                backTo: 'federationScreen',
+                extractor: extractFederationMilitary
+            },
+            'federationAdministration': { 
+                file: '宇宙详解.txt',
+                title: '埃科特联邦 - 行政划分',
+                backTo: 'federationScreen',
+                extractor: extractFederationAdministration
+            },
+            'federationSequence': { 
+                file: '宇宙详解.txt',
+                title: '天赋序列',
+                backTo: 'federationScreen',
+                extractor: extractFederationSequence
+            },
+            'federationSpecial': { 
+                file: '宇宙详解.txt',
+                title: '联邦特别行动组',
+                backTo: 'federationScreen',
+                extractor: extractFederationSpecial
+            },
+            'godMakingPlan': { 
+                file: '宇宙详解.txt',
+                title: '造神计划',
+                backTo: 'federationScreen',
+                extractor: extractGodMakingPlan
+            },
+            'twelveApostles': { 
+                file: '宇宙详解.txt',
+                title: '十二使徒',
+                backTo: 'federationScreen',
+                extractor: extractTwelveApostles
+            },
+            
+            // 宇宙详解 - 势力部分
+            'blancaGroup': { 
+                file: '宇宙详解.txt',
+                title: '布兰卡集团',
+                backTo: 'federationForcesScreen',
+                extractor: extractBlancaGroup
+            },
+            'asrFoundation': { 
+                file: '宇宙详解.txt',
+                title: 'A.E.S.I.R基金会',
+                backTo: 'federationForcesScreen',
+                extractor: extractAsrFoundation
+            },
+            'cpcAA': { 
+                file: '宇宙详解.txt',
+                title: '卡萨布兰卡泛宇宙裁决协会',
+                backTo: 'federationForcesScreen',
+                extractor: extractCpcAA
+            },
+            'chaosTemple': { 
+                file: '宇宙详解.txt',
+                title: '混沌圣殿协会',
+                backTo: 'federationForcesScreen',
+                extractor: extractChaosTemple
+            },
+            'tianYuanGroup': { 
+                file: '宇宙详解.txt',
+                title: '天渊集团',
+                backTo: 'federationForcesScreen',
+                extractor: extractTianYuanGroup
+            },
+            'truthChurch': { 
+                file: '宇宙详解.txt',
+                title: '真理教会',
+                backTo: 'federationForcesScreen',
+                extractor: extractTruthChurch
+            },
+            'sequenceAssociation': { 
+                file: '宇宙详解.txt',
+                title: '序列协会',
+                backTo: 'federationForcesScreen',
+                extractor: extractSequenceAssociation
+            },
+            'fleshClan': { 
+                file: '宇宙详解.txt',
+                title: '血肉氏族',
+                backTo: 'federationForcesScreen',
+                extractor: extractFleshClan
+            },
+            'rootConvention': { 
+                file: '宇宙详解.txt',
+                title: '根蔓公约',
+                backTo: 'federationForcesScreen',
+                extractor: extractRootConvention
+            },
+            'wizardHall': { 
+                file: '宇宙详解.txt',
+                title: '术士殿堂',
+                backTo: 'federationForcesScreen',
+                extractor: extractWizardHall
+            },
+            'mechanicalCollege': { 
+                file: '宇宙详解.txt',
+                title: '机械学院',
+                backTo: 'federationForcesScreen',
+                extractor: extractMechanicalCollege
+            },
+            
+            // 宇宙详解 - 夏黎虫族
+            'xenorapaxIntroduction': { 
+                file: '宇宙详解.txt',
+                title: '夏黎虫族 - 简介',
+                backTo: 'xenorapaxScreen',
+                extractor: extractXenorapaxIntroduction
+            },
+            'xenorapaxPhysiology': { 
+                file: '宇宙详解.txt',
+                title: '夏黎虫族 - 生理特征',
+                backTo: 'xenorapaxScreen',
+                extractor: extractXenorapaxPhysiology
+            },
+            'xenorapaxSociety': { 
+                file: '宇宙详解.txt',
+                title: '夏黎虫族 - 社会结构',
+                backTo: 'xenorapaxScreen',
+                extractor: extractXenorapaxSociety
+            },
+            'xenorapaxBehavior': { 
+                file: '宇宙详解.txt',
+                title: '夏黎虫族 - 行为模式',
+                backTo: 'xenorapaxScreen',
+                extractor: extractXenorapaxBehavior
+            },
+            
+            // 原初七神
+            'primordialIntroduction': { 
+                file: '原初七神.txt',
+                title: '原初七神 - 简介',
+                backTo: 'primordialGodsScreen',
+                extractor: extractPrimordialIntroduction
+            },
+            'fateGod': { 
+                file: '原初七神.txt',
+                title: '命运之神 - 缪',
+                backTo: 'primordialGodsScreen',
+                extractor: extractFateGod
+            },
+            'lawGod': { 
+                file: '原初七神.txt',
+                title: '法则之神 - 珐',
+                backTo: 'primordialGodsScreen',
+                extractor: extractLawGod
+            },
+            'skyGod': { 
+                file: '原初七神.txt',
+                title: '天空之神 - 昙',
+                backTo: 'primordialGodsScreen',
+                extractor: extractSkyGod
+            },
+            'earthGod': { 
+                file: '原初七神.txt',
+                title: '大地之神 - 埊',
+                backTo: 'primordialGodsScreen',
+                extractor: extractEarthGod
+            },
+            'oceanGod': { 
+                file: '原初七神.txt',
+                title: '海洋之神 - 瀚',
+                backTo: 'primordialGodsScreen',
+                extractor: extractOceanGod
+            },
+            'lifeGod': { 
+                file: '原初七神.txt',
+                title: '生命之神 - 棽',
+                backTo: 'primordialGodsScreen',
+                extractor: extractLifeGod
+            },
+            'deathGod': { 
+                file: '原初七神.txt',
+                title: '死亡之神 - 殇',
+                backTo: 'primordialGodsScreen',
+                extractor: extractDeathGod
+            },
+            'commonArea': { 
+                file: '原初七神.txt',
+                title: '公共区域',
+                backTo: 'primordialGodsScreen',
+                extractor: extractCommonArea
+            },
+            
+            // 人物特辑
+            'liMinghang': { 
+                file: '人物特辑.txt',
+                title: '"星渊来客"：夏黎王子李明航',
+                backTo: 'charactersScreen',
+                extractor: extractLiMinghang
+            },
+            'palamon': { 
+                file: '人物特辑.txt',
+                title: '"飘零残枝"：生命遗孤帕莱蔓',
+                backTo: 'charactersScreen',
+                extractor: extractPalamon
+            }
+        };
+
+        // 文本提取函数 - 宇宙详解
+        function extractFederationHistory(text) {
+            const start = text.indexOf('简史：');
+            const end = text.indexOf('制度：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractFederationSystem(text) {
+            const start = text.indexOf('制度：');
+            const end = text.indexOf('军队：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractFederationMilitary(text) {
+            const start = text.indexOf('军队：');
+            const end = text.indexOf('行政划分：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractFederationAdministration(text) {
+            const start = text.indexOf('行政划分：');
+            const end = text.indexOf('布兰卡集团：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractBlancaGroup(text) {
+            const start = text.indexOf('布兰卡集团：');
+            const end = text.indexOf('A.E.S.I.R基金会：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractAsrFoundation(text) {
+            const start = text.indexOf('A.E.S.I.R基金会：');
+            const end = text.indexOf('卡萨布兰卡泛宇宙裁决协会：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractCpcAA(text) {
+            const start = text.indexOf('卡萨布兰卡泛宇宙裁决协会：');
+            const end = text.indexOf('混沌圣殿协会：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractChaosTemple(text) {
+            const start = text.indexOf('混沌圣殿协会：');
+            const end = text.indexOf('天渊集团：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractTianYuanGroup(text) {
+            const start = text.indexOf('天渊集团：');
+            const end = text.indexOf('真理教会：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractTruthChurch(text) {
+            const start = text.indexOf('真理教会：');
+            const end = text.indexOf('序列协会：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractSequenceAssociation(text) {
+            const start = text.indexOf('序列协会：');
+            const end = text.indexOf('血肉氏族：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractFleshClan(text) {
+            const start = text.indexOf('血肉氏族：');
+            const end = text.indexOf('根蔓公约：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractRootConvention(text) {
+            const start = text.indexOf('根蔓公约：');
+            const end = text.indexOf('术士殿堂：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractWizardHall(text) {
+            const start = text.indexOf('术士殿堂：');
+            const end = text.indexOf('机械学院：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractMechanicalCollege(text) {
+            const start = text.indexOf('机械学院：');
+            const end = text.indexOf('天赋序列：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractFederationSequence(text) {
+            const start = text.indexOf('天赋序列：');
+            const end = text.indexOf('联邦的几位资料公开的天使：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractFederationSpecial(text) {
+            const start = text.indexOf('联邦特别行动组：');
+            const end = text.indexOf('造神计划：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractGodMakingPlan(text) {
+            const start = text.indexOf('造神计划：');
+            const end = text.indexOf('十二使徒：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractTwelveApostles(text) {
+            const start = text.indexOf('十二使徒：');
+            const end = text.indexOf('夏黎虫族(Xenorapax Swarm)：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        // 夏黎虫族提取函数
+        function extractXenorapaxIntroduction(text) {
+            const start = text.indexOf('夏黎虫族(Xenorapax Swarm)：');
+            const end = text.indexOf('生理特征：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractXenorapaxPhysiology(text) {
+            const start = text.indexOf('生理特征：');
+            const end = text.indexOf('社会结构：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractXenorapaxSociety(text) {
+            const start = text.indexOf('社会结构：');
+            const end = text.indexOf('行为模式：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractXenorapaxBehavior(text) {
+            const start = text.indexOf('行为模式：');
+            return start !== -1 ? text.substring(start) : '内容未找到';
+        }
+
+        // 原初七神提取函数
+        function extractPrimordialIntroduction(text) {
+            const end = text.indexOf('命运之神是一位作家');
+            return end !== -1 ? text.substring(0, end) : '内容未找到';
+        }
+
+        function extractFateGod(text) {
+            const start = text.indexOf('命运之神是一位作家');
+            const end = text.indexOf('法则之神是一位程序员');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractLawGod(text) {
+            const start = text.indexOf('法则之神是一位程序员');
+            const end = text.indexOf('天空之神掌握着大部分空间的权柄');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractSkyGod(text) {
+            const start = text.indexOf('天空之神掌握着大部分空间的权柄');
+            const end = text.indexOf('大地之神是一名工匠');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractEarthGod(text) {
+            const start = text.indexOf('大地之神是一名工匠');
+            const end = text.indexOf('海洋之神是一名调酒师');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractOceanGod(text) {
+            const start = text.indexOf('海洋之神是一名调酒师');
+            const end = text.indexOf('生命之神是一位生物学家');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractLifeGod(text) {
+            const start = text.indexOf('生命之神是一位生物学家');
+            const end = text.indexOf('死亡之神是一名管理员');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractDeathGod(text) {
+            const start = text.indexOf('死亡之神是一名管理员');
+            const end = text.indexOf('公共区域：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractCommonArea(text) {
+            const start = text.indexOf('公共区域：');
+            return start !== -1 ? text.substring(start) : '内容未找到';
+        }
+
+        // 人物特辑提取函数
+        function extractLiMinghang(text) {
+            const start = text.indexOf('"星渊来客"：夏黎王子李明航');
+            const end = text.indexOf('"飘零残枝"：生命遗孤帕莱蔓');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractPalamon(text) {
+            const start = text.indexOf('"飘零残枝"：生命遗孤帕莱蔓');
+            return start !== -1 ? text.substring(start) : '内容未找到';
+        }
+
+        // 加载文档函数
+        function loadDocument(docKey) {
+            const docInfo = documentMap[docKey];
+            if (!docInfo) {
+                alert('文档未找到');
+                return;
+            }
+            
+            // 更新标题
+            document.getElementById('documentTitle').textContent = docInfo.title;
+            
+            // 设置返回按钮
+            document.getElementById('backButton').onclick = function() {
+                showScreen(docInfo.backTo);
+            };
+            
+            // 显示加载中
+            document.getElementById('documentContent').innerHTML = '<div class="loading-indicator">> 正在加载文档内容...</div>';
+            
+            // 显示文档屏幕
+            showScreen('documentScreen');
+            
+            // 加载TXT文件
+            fetch(docInfo.file)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('文件加载失败: ' + response.status);
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    let content = '';
+                    
+                    if (docInfo.extractor) {
+                        // 使用提取器提取特定部分
+                        content = docInfo.extractor(text);
+                    } else {
+                        // 直接显示整个文件内容
+                        content = text;
+                    }
+                    
+                    // 格式化内容
+                    const formattedContent = formatTextContent(content);
+                    document.getElementById('documentContent').innerHTML = formattedContent;
+                })
+                .catch(error => {
+                    console.error('加载文档时出错:', error);
+                    document.getElementById('documentContent').innerHTML = 
+                        '<div class="terminal-text" style="color: #8b0000;">> 错误: 无法加载文档 - ' + error.message + '</div>';
+                });
+        }
+
+        // 文本格式化函数
+        function formatTextContent(text) {
+            if (!text) return '<p>内容为空</p>';
+            
+            // 按行分割
+            const lines = text.split('\n');
+            let html = '';
+            let inList = false;
+            
+            for (let line of lines) {
+                line = line.trim();
+                
+                if (!line) {
+                    if (inList) {
+                        html += '</ul>';
+                        inList = false;
+                    }
+                    html += '<br>';
+                    continue;
+                }
+                
+                // 检测标题
+                if (line.endsWith('：') && line.length < 20) {
+                    if (inList) {
+                        html += '</ul>';
+                        inList = false;
+                    }
+                    html += `<h3>${line}</h3>`;
+                }
+                // 检测列表项
+                else if (line.startsWith('- ') || line.startsWith('* ') || /^\d\./.test(line)) {
+                    if (!inList) {
+                        html += '<ul>';
+                        inList = true;
+                    }
+                    html += `<li>${line.replace(/^[-*]\s|^\d\.\s/, '')}</li>`;
+                }
+                // 普通段落
+                else {
+                    if (inList) {
+                        html += '</ul>';
+                        inList = false;
+                    }
+                    html += `<p>${line}</p>`;
+                }
+            }
+            
+            // 如果最后还在列表中，关闭列表
+            if (inList) {
+                html += '</ul>';
+            }
+            
+            return html;
+        }
 
         // 页面加载时检查锁定状态
         document.addEventListener('DOMContentLoaded', function() {
@@ -531,31 +1398,23 @@
         function checkLockoutStatus() {
             const now = Date.now();
             if (lockoutUntil > now) {
-                // 系统处于锁定状态
                 enableLockout();
                 startCountdown();
             } else if (attempts >= MAX_ATTEMPTS) {
-                // 锁定时间已过，重置尝试次数
                 resetAttempts();
             }
         }
 
         function enableLockout() {
-            // 隐藏正常认证元素
             document.getElementById('normalAuthElements').classList.add('lockout-hidden');
-            // 显示锁定消息
             document.getElementById('lockoutMessage').style.display = 'block';
-            // 禁用输入框和按钮
             document.getElementById('passwordInput').disabled = true;
             document.getElementById('submitBtn').disabled = true;
         }
 
         function disableLockout() {
-            // 显示正常认证元素
             document.getElementById('normalAuthElements').classList.remove('lockout-hidden');
-            // 隐藏锁定消息
             document.getElementById('lockoutMessage').style.display = 'none';
-            // 启用输入框和按钮
             document.getElementById('passwordInput').disabled = false;
             document.getElementById('submitBtn').disabled = false;
         }
@@ -584,7 +1443,7 @@
         }
 
         function updateAttemptsInfo() {
-            const attemptsInfo = document.getElementById('attemptsInfo');
+            // 保持原有逻辑
         }
 
         function resetAttempts() {
@@ -596,11 +1455,9 @@
         }
 
         function showScreen(screenId) {
-            // 隐藏所有屏幕
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
             });
-            // 显示目标屏幕
             document.getElementById(screenId).classList.add('active');
         }
 
@@ -611,7 +1468,6 @@
         }
 
         function checkPassword() {
-            // 检查是否处于锁定状态
             if (lockoutUntil > Date.now()) {
                 alert('系统暂时锁定，请稍后再试。');
                 return;
@@ -620,19 +1476,16 @@
             const input = document.getElementById('passwordInput').value;
             
             if (input === MASTER_PASSWORD) {
-                // 密码正确，重置尝试次数并显示菜单
                 resetAttempts();
                 showScreen('menuScreen');
             } else if (input === "联系持有者") {
                 contactOwner();
             } else {
-                // 密码错误，增加尝试次数
                 attempts++;
                 localStorage.setItem('loginAttempts', attempts);
                 updateAttemptsInfo();
                 
                 if (attempts >= MAX_ATTEMPTS) {
-                    // 达到最大尝试次数，锁定系统
                     lockoutUntil = Date.now() + LOCKOUT_DURATION;
                     localStorage.setItem('lockoutUntil', lockoutUntil);
                     enableLockout();
@@ -643,7 +1496,6 @@
                 }
             }
             
-            // 清空输入框
             document.getElementById('passwordInput').value = '';
         }
 
