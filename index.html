@@ -567,11 +567,6 @@
 
         function updateAttemptsInfo() {
             const attemptsInfo = document.getElementById('attemptsInfo');
-            if (attempts > 0) {
-                attemptsInfo.textContent = `剩余尝试次数: ${MAX_ATTEMPTS - attempts}`;
-            } else {
-                attemptsInfo.textContent = '';
-            }
         }
 
         function resetAttempts() {
@@ -626,7 +621,7 @@
                     startCountdown();
                     alert('安全协议触发：系统已暂时锁定。');
                 } else {
-                    alert(`访问被拒绝！无效的访问凭证。剩余尝试次数: ${MAX_ATTEMPTS - attempts}`);
+                    alert(`访问被拒绝！无效的访问凭证。`);
                 }
             }
             
