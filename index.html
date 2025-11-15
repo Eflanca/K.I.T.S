@@ -400,6 +400,10 @@
             font-size: 0.8em;
             margin-top: 5px;
         }
+        /* 锁定状态下隐藏的元素 */
+        .lockout-hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -441,18 +445,24 @@
                 <h3>身份验证 [CLASSIFIED]</h3>
                 <p>请输入访问凭证：</p>
                 <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">证明您取得了使用许可。若您是意外拾取本卡，选择"联系持有者"按钮</p>
-                <div class="input-group">
-                    <input type="password" id="passwordInput" placeholder="输入访问密码" onkeypress="handleKeyPress(event)">
+                
+                <!-- 正常状态下的认证元素 -->
+                <div id="normalAuthElements">
+                    <div class="input-group">
+                        <input type="password" id="passwordInput" placeholder="输入访问密码" onkeypress="handleKeyPress(event)">
+                    </div>
+                    <!-- 尝试次数信息 -->
+                    <div id="attemptsInfo" class="attempts-info"></div>
+                    <button class="btn" id="submitBtn" onclick="checkPassword()">确认访问</button>
                 </div>
+                
                 <!-- 锁定消息区域 -->
                 <div id="lockoutMessage" class="lockout-message" style="display: none;">
                     <div>安全锁定激活</div>
                     <div>系统已暂时锁定</div>
                     <div>请在 <span id="countdown" class="countdown">05:00</span> 后重试</div>
                 </div>
-                <!-- 尝试次数信息 -->
-                <div id="attemptsInfo" class="attempts-info"></div>
-                <button class="btn" id="submitBtn" onclick="checkPassword()">确认访问</button>
+                
                 <button class="btn btn-secondary" onclick="contactOwner()">联系持有者</button>
             </div>
 
@@ -464,7 +474,7 @@
                     访问持有者主页
                 </div>
                 <div class="menu-item" onclick="openLink('http://scp-wiki-cn.wikidot.com/')">
-                    访问基金会内部网络
+                    访问基金会官网
                 </div>
                 <div style="margin-top: auto;">
                     <button class="btn btn-secondary" onclick="logout()">安全退出</button>
@@ -531,15 +541,23 @@
         }
 
         function enableLockout() {
+            // 隐藏正常认证元素
+            document.getElementById('normalAuthElements').classList.add('lockout-hidden');
+            // 显示锁定消息
+            document.getElementById('lockoutMessage').style.display = 'block';
+            // 禁用输入框和按钮
             document.getElementById('passwordInput').disabled = true;
             document.getElementById('submitBtn').disabled = true;
-            document.getElementById('lockoutMessage').style.display = 'block';
         }
 
         function disableLockout() {
+            // 显示正常认证元素
+            document.getElementById('normalAuthElements').classList.remove('lockout-hidden');
+            // 隐藏锁定消息
+            document.getElementById('lockoutMessage').style.display = 'none';
+            // 启用输入框和按钮
             document.getElementById('passwordInput').disabled = false;
             document.getElementById('submitBtn').disabled = false;
-            document.getElementById('lockoutMessage').style.display = 'none';
         }
 
         function startCountdown() {
