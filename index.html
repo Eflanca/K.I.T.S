@@ -51,7 +51,7 @@
             100% { top: 100%; }
         }
         
-        /* 标志图片样式 - 桌面端固定定位 */
+        /* 标志图片样式 */
         .logo {
             z-index: 99;
             max-height: 70px;
@@ -66,16 +66,25 @@
         }
         
         /* 桌面端 - 固定定位 */
-        .scp-logo-container {
+        .desktop-logos .scp-logo-container {
             position: fixed;
             top: 15px;
             left: 15px;
         }
         
-        .mtf-logo-container {
+        .desktop-logos .mtf-logo-container {
             position: fixed;
             top: 15px;
             right: 15px;
+        }
+        
+        /* 移动端 - 相对定位，在页面顶部 */
+        .mobile-logos {
+            display: none;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 20px;
         }
         
         .main-container {
@@ -89,7 +98,7 @@
             min-height: 500px;
             position: relative;
             border: 1px solid #333;
-            margin-top: 40px; /* 为固定定位的标志图片留出空间 */
+            margin-top: 40px; /* 为桌面端固定定位的标志图片留出空间 */
         }
         .main-container::before {
             content: "";
@@ -313,36 +322,22 @@
         }
         /* 响应式设计 - 移动端 */
         @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .mobile-logos {
+                display: flex;
+            }
+            
+            .desktop-logos {
+                display: none;
+            }
+            
             .main-container {
                 flex-direction: column;
                 margin-top: 0; /* 移动端不需要顶部边距 */
-            }
-            
-            /* 移动端 - 相对定位，随页面滚动 */
-            .scp-logo-container {
-                position: relative;
-                top: auto;
-                left: auto;
-                margin-bottom: 10px;
-                display: flex;
-                justify-content: flex-start;
-            }
-            
-            .mtf-logo-container {
-                position: relative;
-                top: auto;
-                right: auto;
-                margin-bottom: 10px;
-                display: flex;
-                justify-content: flex-end;
-            }
-            
-            /* 移动端图片容器布局 */
-            .mobile-logos-container {
-                display: flex;
-                justify-content: space-between;
-                width: 100%;
-                margin-bottom: 10px;
             }
             
             .warning-area {
@@ -398,28 +393,30 @@
     <div class="scan-line"></div>
     
     <!-- 桌面端标志 - 固定定位 -->
-    <div class="logo-container scp-logo-container">
-        <img src="SCP.jpg" alt="SCP Foundation" class="logo scp-logo">
+    <div class="desktop-logos">
+        <div class="logo-container scp-logo-container">
+            <img src="SCP.jpg" alt="SCP Foundation" class="logo scp-logo">
+        </div>
+        
+        <div class="logo-container mtf-logo-container">
+            <img src="MTF.jpg" alt="Mobile Task Force" class="logo mtf-logo">
+        </div>
     </div>
     
-    <div class="logo-container mtf-logo-container">
-        <img src="MTF.jpg" alt="Mobile Task Force" class="logo mtf-logo">
+    <!-- 移动端标志 - 相对定位，在页面顶部 -->
+    <div class="mobile-logos">
+        <div class="logo-container">
+            <img src="SCP.jpg" alt="SCP Foundation" class="logo scp-logo">
+        </div>
+        
+        <div class="logo-container">
+            <img src="MTF.jpg" alt="Mobile Task Force" class="logo mtf-logo">
+        </div>
     </div>
     
     <div class="main-container">
         <!-- 左侧功能区域 -->
         <div class="function-area">
-            <!-- 移动端标志 - 相对定位，放在内容内部 -->
-            <div class="mobile-logos-container" style="display: none;">
-                <div class="logo-container scp-logo-container">
-                    <img src="SCP.jpg" alt="SCP Foundation" class="logo scp-logo">
-                </div>
-                
-                <div class="logo-container mtf-logo-container">
-                    <img src="MTF.jpg" alt="Mobile Task Force" class="logo mtf-logo">
-                </div>
-            </div>
-            
             <div class="header">
                 <h1>K.I.T.S</h1>
                 <div class="subtitle">K.I.T.S - 技术支持系统</div>
@@ -506,30 +503,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             checkLockoutStatus();
             updateAttemptsInfo();
-            adjustLogosForScreenSize();
-            
-            // 监听窗口大小变化
-            window.addEventListener('resize', adjustLogosForScreenSize);
         });
-
-        function adjustLogosForScreenSize() {
-            const mobileLogosContainer = document.querySelector('.mobile-logos-container');
-            const desktopLogos = document.querySelectorAll('.logo-container:not(.mobile-logos-container *)');
-            
-            if (window.innerWidth <= 768) {
-                // 移动端 - 显示移动端标志，隐藏桌面端标志
-                mobileLogosContainer.style.display = 'flex';
-                desktopLogos.forEach(logo => {
-                    logo.style.display = 'none';
-                });
-            } else {
-                // 桌面端 - 隐藏移动端标志，显示桌面端标志
-                mobileLogosContainer.style.display = 'none';
-                desktopLogos.forEach(logo => {
-                    logo.style.display = 'block';
-                });
-            }
-        }
 
         function checkLockoutStatus() {
             const now = Date.now();
