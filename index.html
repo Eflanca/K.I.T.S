@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>K.I.T.S - 技术支持系统</title>
     <style>
+        /* 保持所有原有的CSS样式不变 */
         * {
             margin: 0;
             padding: 0;
@@ -450,6 +451,19 @@
             text-align: center;
             padding: 20px;
         }
+        
+        .god-details {
+            margin-bottom: 20px;
+        }
+        
+        .god-details h4 {
+            color: #8b0000;
+            margin-bottom: 5px;
+        }
+        
+        .god-details p {
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -651,11 +665,11 @@
                     天赋序列
                 </div>
                 
-                <div class="menu-item" onclick="loadDocument('federationSpecial')">
+                <div class="menu-item" onclick="showScreen('specialOperationsScreen')">
                     联邦特别行动组
                 </div>
                 
-                <div class="menu-item" onclick="loadDocument('godMakingPlan')">
+                <div class="menu-item" onclick="showScreen('godMakingPlanScreen')">
                     造神计划
                 </div>
                 
@@ -716,6 +730,107 @@
                 
                 <div class="menu-item" onclick="loadDocument('mechanicalCollege')">
                     机械学院
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('federationScreen')">返回联邦</button>
+                </div>
+            </div>
+            
+            <!-- 联邦特别行动组屏幕 -->
+            <div id="specialOperationsScreen" class="screen">
+                <div class="terminal-text">> 加载联邦特别行动组数据...</div>
+                <h3>联邦特别行动组</h3>
+                <p>选择要查看的行动组：</p>
+                
+                <div class="menu-item" onclick="loadDocument('chiefTeamIntro')">
+                    首席小组 - 简介
+                </div>
+                
+                <div class="menu-item" onclick="showScreen('chiefTeamMembersScreen')">
+                    首席小组 - 成员
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('protagonistTeam')">
+                    主角小组
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('supportingTeam')">
+                    配角小组
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('reincarnationTeam')">
+                    轮回小组
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('inspectionTeam')">
+                    稽查小组
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('zeroTeam')">
+                    归零小组
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('skyNetTeam')">
+                    天网小组
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('filterNetTeam')">
+                    滤网小组
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('dreamBuilderTeam')">
+                    筑梦小组
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('federationScreen')">返回联邦</button>
+                </div>
+            </div>
+            
+            <!-- 首席小组成员屏幕 -->
+            <div id="chiefTeamMembersScreen" class="screen">
+                <div class="terminal-text">> 加载首席小组成员数据...</div>
+                <h3>首席小组 - 成员</h3>
+                <p>选择要查看的成员：</p>
+                
+                <div class="menu-item" onclick="loadDocument('combatAngel')">
+                    战斗天使洛筱然
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('phoenix')">
+                    不死鸟杨小澜
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('gunner')">
+                    百里守约白长歌
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('witch')">
+                    元素魔女蒂莉丝
+                </div>
+                
+                <div class="menu-item" onclick="loadDocument('allFather')">
+                    全知全能维斯莱特
+                </div>
+                
+                <div style="margin-top: auto;">
+                    <button class="btn btn-secondary" onclick="showScreen('specialOperationsScreen')">返回特别行动组</button>
+                </div>
+            </div>
+            
+            <!-- 造神计划屏幕 -->
+            <div id="godMakingPlanScreen" class="screen">
+                <div class="terminal-text">> 加载造神计划数据...</div>
+                <h3>造神计划</h3>
+                <p>选择要查看的部分：</p>
+                
+                <div class="menu-item" onclick="loadDocument('godMakingPlanIntro')">
+                    造神计划简介
+                </div>
+                
+                <div class="menu-item" onclick="showScreen('chiefTeamMembersScreen')">
+                    首席小组成员
                 </div>
                 
                 <div style="margin-top: auto;">
@@ -894,18 +1009,6 @@
                 backTo: 'federationScreen',
                 extractor: extractFederationSequence
             },
-            'federationSpecial': { 
-                file: '宇宙详解.txt',
-                title: '联邦特别行动组',
-                backTo: 'federationScreen',
-                extractor: extractFederationSpecial
-            },
-            'godMakingPlan': { 
-                file: '宇宙详解.txt',
-                title: '造神计划',
-                backTo: 'federationScreen',
-                extractor: extractGodMakingPlan
-            },
             'twelveApostles': { 
                 file: '宇宙详解.txt',
                 title: '十二使徒',
@@ -979,6 +1082,102 @@
                 title: '机械学院',
                 backTo: 'federationForcesScreen',
                 extractor: extractMechanicalCollege
+            },
+            
+            // 宇宙详解 - 联邦特别行动组
+            'chiefTeamIntro': { 
+                file: '宇宙详解.txt',
+                title: '首席小组 - 简介',
+                backTo: 'specialOperationsScreen',
+                extractor: extractChiefTeamIntro
+            },
+            'protagonistTeam': { 
+                file: '宇宙详解.txt',
+                title: '主角小组',
+                backTo: 'specialOperationsScreen',
+                extractor: extractProtagonistTeam
+            },
+            'supportingTeam': { 
+                file: '宇宙详解.txt',
+                title: '配角小组',
+                backTo: 'specialOperationsScreen',
+                extractor: extractSupportingTeam
+            },
+            'reincarnationTeam': { 
+                file: '宇宙详解.txt',
+                title: '轮回小组',
+                backTo: 'specialOperationsScreen',
+                extractor: extractReincarnationTeam
+            },
+            'inspectionTeam': { 
+                file: '宇宙详解.txt',
+                title: '稽查小组',
+                backTo: 'specialOperationsScreen',
+                extractor: extractInspectionTeam
+            },
+            'zeroTeam': { 
+                file: '宇宙详解.txt',
+                title: '归零小组',
+                backTo: 'specialOperationsScreen',
+                extractor: extractZeroTeam
+            },
+            'skyNetTeam': { 
+                file: '宇宙详解.txt',
+                title: '天网小组',
+                backTo: 'specialOperationsScreen',
+                extractor: extractSkyNetTeam
+            },
+            'filterNetTeam': { 
+                file: '宇宙详解.txt',
+                title: '滤网小组',
+                backTo: 'specialOperationsScreen',
+                extractor: extractFilterNetTeam
+            },
+            'dreamBuilderTeam': { 
+                file: '宇宙详解.txt',
+                title: '筑梦小组',
+                backTo: 'specialOperationsScreen',
+                extractor: extractDreamBuilderTeam
+            },
+            
+            // 宇宙详解 - 首席小组成员
+            'combatAngel': { 
+                file: '宇宙详解.txt',
+                title: '战斗天使洛筱然',
+                backTo: 'chiefTeamMembersScreen',
+                extractor: extractCombatAngel
+            },
+            'phoenix': { 
+                file: '宇宙详解.txt',
+                title: '不死鸟杨小澜',
+                backTo: 'chiefTeamMembersScreen',
+                extractor: extractPhoenix
+            },
+            'gunner': { 
+                file: '宇宙详解.txt',
+                title: '百里守约白长歌',
+                backTo: 'chiefTeamMembersScreen',
+                extractor: extractGunner
+            },
+            'witch': { 
+                file: '宇宙详解.txt',
+                title: '元素魔女蒂莉丝',
+                backTo: 'chiefTeamMembersScreen',
+                extractor: extractWitch
+            },
+            'allFather': { 
+                file: '宇宙详解.txt',
+                title: '全知全能维斯莱特',
+                backTo: 'chiefTeamMembersScreen',
+                extractor: extractAllFather
+            },
+            
+            // 宇宙详解 - 造神计划
+            'godMakingPlanIntro': { 
+                file: '宇宙详解.txt',
+                title: '造神计划简介',
+                backTo: 'godMakingPlanScreen',
+                extractor: extractGodMakingPlanIntro
             },
             
             // 宇宙详解 - 夏黎虫族
@@ -1175,15 +1374,96 @@
             return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
         }
 
-        function extractFederationSpecial(text) {
-            const start = text.indexOf('联邦特别行动组：');
+        // 联邦特别行动组提取函数
+        function extractChiefTeamIntro(text) {
+            const start = text.indexOf('代号"首席"(状态未知)：');
+            const end = text.indexOf('代号"主角"(长期外派)：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractProtagonistTeam(text) {
+            const start = text.indexOf('代号"主角"(长期外派)：');
+            const end = text.indexOf('代号"配角"(长期外派)：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractSupportingTeam(text) {
+            const start = text.indexOf('代号"配角"(长期外派)：');
+            const end = text.indexOf('代号"轮回"(封存)：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractReincarnationTeam(text) {
+            const start = text.indexOf('代号"轮回"(封存)：');
+            const end = text.indexOf('代号"稽查"(状态未知)：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractInspectionTeam(text) {
+            const start = text.indexOf('代号"稽查"(状态未知)：');
+            const end = text.indexOf('代号"归零"(状态未知)：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractZeroTeam(text) {
+            const start = text.indexOf('代号"归零"(状态未知)：');
+            const end = text.indexOf('代号"天网"(封存)：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractSkyNetTeam(text) {
+            const start = text.indexOf('代号"天网"(封存)：');
+            const end = text.indexOf('代号"滤网"(长期外派)：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractFilterNetTeam(text) {
+            const start = text.indexOf('代号"滤网"(长期外派)：');
+            const end = text.indexOf('代号"筑梦"(封存)：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractDreamBuilderTeam(text) {
+            const start = text.indexOf('代号"筑梦"(封存)：');
             const end = text.indexOf('造神计划：');
             return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
         }
 
-        function extractGodMakingPlan(text) {
-            const start = text.indexOf('造神计划：');
+        // 首席小组成员提取函数
+        function extractCombatAngel(text) {
+            const start = text.indexOf('"战斗天使"洛筱然：');
+            const end = text.indexOf('"不死鸟"杨小澜：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractPhoenix(text) {
+            const start = text.indexOf('"不死鸟"杨小澜：');
+            const end = text.indexOf('"百里守约"白长歌：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractGunner(text) {
+            const start = text.indexOf('"百里守约"白长歌：');
+            const end = text.indexOf('"元素魔女"蒂莉丝：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractWitch(text) {
+            const start = text.indexOf('"元素魔女"蒂莉丝：');
+            const end = text.indexOf('"全知全能"维斯莱特：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        function extractAllFather(text) {
+            const start = text.indexOf('"全知全能"维斯莱特：');
             const end = text.indexOf('十二使徒：');
+            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+        }
+
+        // 造神计划提取函数
+        function extractGodMakingPlanIntro(text) {
+            const start = text.indexOf('造神计划：');
+            const end = text.indexOf('联邦执法局特别行动组"首席"小组：');
             return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
         }
 
@@ -1224,50 +1504,106 @@
         }
 
         function extractFateGod(text) {
-            const start = text.indexOf('命运之神是一位作家');
-            const end = text.indexOf('法则之神是一位程序员');
-            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+            return extractGodDetails(text, '命运之神', '缪', '法则之神');
         }
 
         function extractLawGod(text) {
-            const start = text.indexOf('法则之神是一位程序员');
-            const end = text.indexOf('天空之神掌握着大部分空间的权柄');
-            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+            return extractGodDetails(text, '法则之神', '珐', '天空之神');
         }
 
         function extractSkyGod(text) {
-            const start = text.indexOf('天空之神掌握着大部分空间的权柄');
-            const end = text.indexOf('大地之神是一名工匠');
-            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+            return extractGodDetails(text, '天空之神', '昙', '大地之神');
         }
 
         function extractEarthGod(text) {
-            const start = text.indexOf('大地之神是一名工匠');
-            const end = text.indexOf('海洋之神是一名调酒师');
-            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+            return extractGodDetails(text, '大地之神', '埊', '海洋之神');
         }
 
         function extractOceanGod(text) {
-            const start = text.indexOf('海洋之神是一名调酒师');
-            const end = text.indexOf('生命之神是一位生物学家');
-            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+            return extractGodDetails(text, '海洋之神', '瀚', '生命之神');
         }
 
         function extractLifeGod(text) {
-            const start = text.indexOf('生命之神是一位生物学家');
-            const end = text.indexOf('死亡之神是一名管理员');
-            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+            return extractGodDetails(text, '生命之神', '棽', '死亡之神');
         }
 
         function extractDeathGod(text) {
-            const start = text.indexOf('死亡之神是一名管理员');
-            const end = text.indexOf('公共区域：');
-            return start !== -1 && end !== -1 ? text.substring(start, end) : '内容未找到';
+            return extractGodDetails(text, '死亡之神', '殇', '公共区域：');
         }
 
         function extractCommonArea(text) {
             const start = text.indexOf('公共区域：');
             return start !== -1 ? text.substring(start) : '内容未找到';
+        }
+
+        // 通用神祇详情提取函数
+        function extractGodDetails(text, godName, chineseName, nextGodName) {
+            const start = text.indexOf(godName);
+            const end = nextGodName ? text.indexOf(nextGodName) : text.indexOf('公共区域：');
+            
+            if (start === -1) return '内容未找到';
+            
+            let content = end !== -1 ? text.substring(start, end) : text.substring(start);
+            
+            // 提取名称
+            const nameStart = content.indexOf('“' + godName.substring(0, 2) + '”叫');
+            let nameContent = '';
+            if (nameStart !== -1) {
+                const nameEnd = content.indexOf('。', nameStart);
+                if (nameEnd !== -1) {
+                    nameContent = content.substring(nameStart, nameEnd + 1);
+                }
+            }
+            
+            // 提取职位
+            const jobStart = content.indexOf(godName + '是一位');
+            let jobContent = '';
+            if (jobStart !== -1) {
+                const jobEnd = content.indexOf('。', jobStart);
+                if (jobEnd !== -1) {
+                    jobContent = content.substring(jobStart, jobEnd + 1);
+                }
+            }
+            
+            // 提取形象
+            const imageStart = content.indexOf(chineseName + '：');
+            let imageContent = '';
+            if (imageStart !== -1) {
+                const imageEnd = content.indexOf('工作室：', imageStart);
+                if (imageEnd !== -1) {
+                    imageContent = content.substring(imageStart, imageEnd);
+                }
+            }
+            
+            // 提取工作室
+            const studioStart = content.indexOf('工作室：');
+            let studioContent = '';
+            if (studioStart !== -1) {
+                const studioEnd = content.indexOf('卧室：', studioStart);
+                if (studioEnd !== -1) {
+                    studioContent = content.substring(studioStart, studioEnd);
+                }
+            }
+            
+            // 提取卧室
+            const bedroomStart = content.indexOf('卧室：');
+            let bedroomContent = '';
+            if (bedroomStart !== -1) {
+                const bedroomEnd = content.indexOf(chineseName + '的', bedroomStart + 10);
+                if (bedroomEnd !== -1) {
+                    bedroomContent = content.substring(bedroomStart, bedroomEnd);
+                } else {
+                    bedroomContent = content.substring(bedroomStart);
+                }
+            }
+            
+            return {
+                name: nameContent,
+                job: jobContent,
+                image: imageContent,
+                studio: studioContent,
+                bedroom: bedroomContent
+            };
         }
 
         // 人物特辑提取函数
@@ -1317,15 +1653,20 @@
                     
                     if (docInfo.extractor) {
                         // 使用提取器提取特定部分
-                        content = docInfo.extractor(text);
+                        const extracted = docInfo.extractor(text);
+                        
+                        // 特殊处理原初七神的格式
+                        if (typeof extracted === 'object') {
+                            content = formatGodContent(extracted, docInfo.title);
+                        } else {
+                            content = formatTextContent(extracted);
+                        }
                     } else {
                         // 直接显示整个文件内容
-                        content = text;
+                        content = formatTextContent(text);
                     }
                     
-                    // 格式化内容
-                    const formattedContent = formatTextContent(content);
-                    document.getElementById('documentContent').innerHTML = formattedContent;
+                    document.getElementById('documentContent').innerHTML = content;
                 })
                 .catch(error => {
                     console.error('加载文档时出错:', error);
@@ -1384,6 +1725,52 @@
             // 如果最后还在列表中，关闭列表
             if (inList) {
                 html += '</ul>';
+            }
+            
+            return html;
+        }
+
+        // 特殊处理原初七神的格式
+        function formatGodContent(godData, title) {
+            if (typeof godData === 'string') {
+                return formatTextContent(godData);
+            }
+            
+            let html = `<h3>${title}</h3>`;
+            
+            if (godData.name) {
+                html += `<div class="god-details">
+                    <h4>名称</h4>
+                    <p>${godData.name}</p>
+                </div>`;
+            }
+            
+            if (godData.job) {
+                html += `<div class="god-details">
+                    <h4>职位</h4>
+                    <p>${godData.job}</p>
+                </div>`;
+            }
+            
+            if (godData.image) {
+                html += `<div class="god-details">
+                    <h4>形象</h4>
+                    <p>${godData.image}</p>
+                </div>`;
+            }
+            
+            if (godData.studio) {
+                html += `<div class="god-details">
+                    <h4>工作室</h4>
+                    <p>${godData.studio}</p>
+                </div>`;
+            }
+            
+            if (godData.bedroom) {
+                html += `<div class="god-details">
+                    <h4>卧室</h4>
+                    <p>${godData.bedroom}</p>
+                </div>`;
             }
             
             return html;
